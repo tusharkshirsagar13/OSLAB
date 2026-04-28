@@ -1,0 +1,130 @@
+1. Header File
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+🔹 2. Structure Definition
+struct Process{
+    int id, at, bt, rt, st, et, tat, wt;
+    int started;
+};
+➤ Fields Meaning:
+id → Process ID
+at → Arrival Time
+bt → Burst Time
+rt → Remaining Time
+st → Start Time
+et → End Time
+tat → Turnaround Time
+wt → Waiting Time
+started → checks if process started or not
+🔹 3. Input Section
+scanf("%d %d",&n, &quantam);
+User enters:
+n → number of processes
+quantam → time quantum
+➤ Process Input
+scanf("%d %d",&p[i].at,&p[i].bt);
+Initialize:
+p[i].rt = p[i].bt;
+p[i].started = 0;
+🔹 4. Round Robin Concept
+
+👉 Each process gets fixed CPU time (quantum)
+👉 If not finished → goes back to queue
+
+🔹 5. Main Scheduling Loop
+while(completed < n)
+Runs until all processes complete
+🔹 6. Process Selection
+if(p[j].at <= t && p[j].rt > 0)
+Select process:
+Arrived
+Not completed
+🔹 7. First Time Execution
+if(p[j].started == 0)
+Set:
+p[j].st = t;
+🔹 8. Time Quantum Execution
+➤ Case 1: Process not finished
+if(p[j].rt > quantam)
+Execute for quantum:
+t += quantam;
+p[j].rt -= quantam;
+➤ Case 2: Process finishes
+else
+Execute remaining time:
+t += p[j].rt;
+p[j].rt = 0;
+completed++;
+🔹 9. Completion Calculations
+p[j].et = t;
+➤ Turnaround Time:
+
+TAT=ET−AT
+
+➤ Waiting Time:
+
+WT=TAT−BT
+
+🔹 10. CPU Idle Case
+if(!done_something) t++;
+If no process is ready:
+→ time increases (CPU idle)
+🔹 11. Queue-Based Logic (Second Part of Your Code)
+
+Your second half uses:
+
+int q[100], front, rear;
+➤ Queue Purpose:
+Maintain ready queue
+Follow circular scheduling
+➤ Add initial processes
+if(at[i] == 0)
+Push into queue
+➤ Execute from Queue
+int i = q[front++];
+Process dequeued
+➤ Reinsert if not finished
+if(rt[i] > 0)
+    q[rear++] = i;
+🔹 12. Final Output
+Table:
+ID   AT   BT   ST   ET   TAT   WT
+Averages:
+Average TAT
+Average WT
+🔹 13. Algorithm Used
+
+✅ Round Robin Scheduling
+
+🔹 14. Key Concept
+Each process gets equal CPU share
+Preemptive scheduling
+Uses time quantum
+🔹 15. Important Observations
+Small quantum → more context switching
+Large quantum → behaves like FCFS
+Fair scheduling
+🔹 16. Major Problems in Your Code ⚠️
+❌ Two main() functions
+❌ Mixed struct + array approach
+❌ Variables from both logics combined
+❌ Queue logic incomplete placement
+❌ Wrong loop nesting
+❌ Broken braces
+🔹 17. What You Intended
+
+Your code combines:
+
+✅ Struct-based Round Robin
+✅ Queue-based Round Robin
+
+👉 But both must be separate programs
+
+🔹 18. Simple Flow Summary
+Take process input
+Initialize remaining time
+Loop until all complete
+Execute each process for quantum
+Reinsert unfinished processes
+Calculate CT, TAT, WT
+Print results

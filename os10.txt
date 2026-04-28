@@ -1,0 +1,128 @@
+🔹 1. Header File
+#include <stdio.h>
+→ Used for input and output functions like printf() and scanf().
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+f → number of frames
+n → length of reference string
+🔹 3. Taking Input (Frames)
+
+User enters number of frames:
+
+scanf("%d", &f);
+Two arrays created:
+frames[f] → stores pages
+counter[f] → tracks recent usage (LRU logic)
+🔹 4. Initialization
+frames[i] = -1;
+counter[i] = 0;
+frames[i] = -1 → means frame is empty
+counter[i] → stores last used index of that page
+🔹 5. Taking Reference String Input
+User enters:
+Length of reference string (n)
+Reference array ref[n]
+
+Example:
+
+7 0 1 2 0 3 0 4
+🔹 6. Page Fault Counter
+int faults = 0;
+Keeps track of total page faults
+🔹 7. Table Header Output
+
+Prints format like:
+
+Ref   F[0]  F[1]  F[2]   STATUS
+---------------------------------
+🔹 8. Main Logic Loop
+for(int i = 0; i < n; i++)
+Iterates through each page in reference string
+🔹 9. HIT Check
+for(int j = 0; j < f; j++)
+Checks if page already exists in frames
+➤ If found (HIT):
+hit = 1;
+counter[j] = i;
+Updates its last used time
+No replacement needed
+🔹 10. MISS (Page Fault)
+
+If page is not found:
+
+➤ Step 1: Find Replacement Index
+int replace_idx = 0;
+
+Loop:
+
+if(frames[j] == -1)
+If empty frame → use it directly
+
+Else:
+
+if(counter[j] < counter[replace_idx])
+Select least recently used page
+Smaller counter = older usage
+🔹 11. Replace Page
+frames[replace_idx] = ref[i];
+counter[replace_idx] = i;
+faults++;
+Replace LRU page
+Update usage time
+Increment page fault
+🔹 12. Output for Each Step
+➤ If FAULT:
+Ref   Frames   FAULT
+➤ If HIT:
+Ref   Frames   HIT
+
+Displays current memory state after every reference
+
+🔹 13. Final Output
+Total Page faults : faults
+Total Page hits   : n - faults
+🔹 14. Algorithm Used
+This program implements:
+
+✅ LRU (Least Recently Used) Page Replacement Algorithm
+
+🔹 15. Key Concept of LRU
+Replace the page that was used least recently
+Uses counter[] to track usage
+🔹 16. Important Observation
+counter[i] = index
+→ stores last accessed time
+Smaller value = older → replace first
+🔹 17. Example Flow (Simple)
+
+Reference:
+
+1 2 3 1 4
+Frames = 3
+
+Steps:
+
+1 → FAULT
+2 → FAULT
+3 → FAULT
+1 → HIT
+4 → replaces least recently used
+🔹 18. Time Complexity
+For each page → checking all frames
+
+👉 O(n × f)
+
+🔹 19. Key Concepts Demonstrated
+✅ Page Replacement
+✅ LRU Algorithm
+✅ Page Hit vs Fault
+✅ Memory management simulation
+🔹 20. Simple Flow Summary
+Take frames input
+Take reference string
+For each page:
+Check HIT
+If MISS → replace LRU
+Print table
+Show total faults & hits

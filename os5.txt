@@ -1,0 +1,137 @@
+1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <limits.h>
+→ Used for INT_MAX (represents very large value)
+🔹 2. Structure Definition
+struct Process {
+    int id, at, bt, rt, st, et, tat, wt;
+    int started;
+};
+➤ Fields Meaning:
+id → Process ID
+at → Arrival Time
+bt → Burst Time
+rt → Remaining Time
+st → Start Time
+et → End Time
+tat → Turnaround Time
+wt → Waiting Time
+started → flag to check if process started
+🔹 3. Main Variables
+int completed = 0, t = 0;
+int min_rt = INT_MAX, shortest = 0;
+int found = 0;
+t → current time
+completed → number of finished processes
+min_rt → minimum remaining time
+shortest → index of selected process
+found → flag to check if any process is ready
+🔹 4. Input Section
+scanf("%d",&n);
+User enters number of processes
+➤ Process Input
+scanf("%d %d",&p[i].at,&p[i].bt);
+
+Initialize:
+
+p[i].rt = p[i].bt;
+p[i].started = 0;
+p[i].st = -1;
+🔹 5. Algorithm Used
+
+✅ SRTF (Shortest Remaining Time First)
+👉 Preemptive version of SJF
+
+🔹 6. Main Loop
+while(completed != n)
+Runs until all processes are completed
+🔹 7. Find Process with Minimum Remaining Time
+if((p[j].at <= t) && (p[j].rt < min_rt && p[j].rt > 0))
+Select process:
+Has arrived
+Has smallest remaining time
+🔹 8. CPU Idle Case
+if(found == 0){
+    t++;
+    continue;
+}
+If no process is ready → CPU waits
+🔹 9. First Time Execution
+if(p[shortest].started == 0)
+Set start time:
+p[shortest].st = t;
+p[shortest].started = 1;
+🔹 10. Execute Process (1 Unit Time)
+p[shortest].rt--;
+Reduce remaining time by 1 unit
+🔹 11. Update Minimum Remaining Time
+min_rt = (p[shortest].rt == 0) ? INT_MAX : p[shortest].rt;
+Reset if process completes
+🔹 12. Process Completion
+if(p[shortest].rt == 0)
+Process finished:
+completed++;
+p[shortest].et = t + 1;
+🔹 13. Time Calculations
+➤ Turnaround Time:
+
+TAT=ET−AT
+
+➤ Waiting Time:
+
+WT=TAT−BT
+
+🔹 14. Increment Time
+t++;
+Move to next time unit
+🔹 15. Output Table
+ID   AT   BT   RT   ST   ET   TAT   WT
+Displays all process details
+🔹 16. Average Calculation
+total_wt += p[i].wt;
+total_tat += p[i].tat;
+Compute averages:
+Average WT = total_wt / n  
+Average TAT = total_tat / n
+🔹 17. Key Concept of SRTF
+At every time unit:
+👉 Pick process with shortest remaining time
+Can preempt running process
+🔹 18. Important Observations
+Faster average waiting time than FCFS
+Can cause starvation (long processes wait)
+Very dynamic scheduling
+🔹 19. Example Flow
+
+Processes:
+
+P1: AT=0, BT=8  
+P2: AT=1, BT=4  
+P3: AT=2, BT=2  
+
+Execution:
+👉 P1 → P2 → P3 → P2 → P1
+
+🔹 20. Time Complexity
+For each time unit → check all processes
+
+👉 O(n × total_time)
+
+🔹 21. Key Concepts Demonstrated
+✅ Preemptive scheduling
+✅ Dynamic process selection
+✅ CPU idle handling
+✅ Time-based simulation
+🔹 22. Important Note ⚠️
+There is an extra } at the end of your code
+Otherwise logic is correct and exam-ready
+🔹 23. Simple Flow Summary
+Take process input
+Initialize remaining time
+At each time:
+Select shortest remaining process
+Execute for 1 unit
+Repeat until all complete
+Calculate CT, TAT, WT
+Print results

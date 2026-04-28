@@ -1,0 +1,115 @@
+🔹 1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <stdlib.h>
+→ Used for abs() function (absolute difference)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+n → number of disk requests
+req[50] → request sequence
+visited[50] → tracks served requests
+head → current disk head position
+total → total seek time
+count → number of completed requests
+🔹 3. Input: Number of Requests
+scanf("%d", &n);
+User enters number of disk requests
+➤ Validation:
+if (n <= 0)
+If no requests → program exits
+🔹 4. Input: Request Sequence
+scanf("%d", &req[i]);
+Stores all disk track requests
+
+Example:
+
+98 183 37 122 14 124 65 67
+🔹 5. Input: Initial Head Position
+scanf("%d", &head);
+Starting position of disk head
+🔹 6. Output Header
+Current    Headmovement
+Displays:
+Current request served
+Movement of disk head
+🔹 7. Main Loop
+while (count < n)
+Runs until all requests are served
+🔹 8. Find Closest Request (SSTF Logic)
+int min = 9999, pos = -1;
+min → smallest distance found
+pos → index of closest request
+🔸 Loop to Find Minimum Distance
+if (!visited[i])
+Only consider unvisited requests
+int diff = abs(head - req[i]);
+Calculate distance from current head
+if (diff < min)
+Select request with minimum seek time
+🔹 9. Process Selected Request
+visited[pos] = 1;
+Mark request as completed
+diff = abs(head - req[pos]);
+Calculate movement
+total += diff;
+Add to total seek time
+head = req[pos];
+Move head to new position
+count++;
+Increment completed requests
+🔹 10. Output Each Step
+Request    Movement
+
+Example:
+
+65    10
+67     2
+🔹 11. Final Output
+printf("Total seek time:%d\n", total);
+Displays total head movement
+🔹 12. Algorithm Used
+
+✅ SSTF (Shortest Seek Time First)
+
+🔹 13. Key Concept of SSTF
+Select request:
+👉 Closest to current head position
+🔹 14. Important Observations
+Faster than FCFS
+Reduces total seek time
+May cause starvation:
+→ Far requests may wait longer
+🔹 15. Example Flow
+
+Requests:
+
+98 183 37 122 14 124 65 67
+Head = 53
+
+Order (approx):
+
+65 → 67 → 37 → 14 → 98 → ...
+Always picks nearest track
+🔹 16. Time Complexity
+For each request → check all remaining
+
+👉 O(n²)
+
+🔹 17. Key Concepts Demonstrated
+✅ Disk Scheduling
+✅ Greedy Approach
+✅ Seek Time Calculation
+✅ Optimization of head movement
+🔹 18. Important Term
+
+👉 Seek Time
+
+Time required to move disk head from one track to another
+🔹 19. Simple Flow Summary
+Take input (requests + head)
+While requests remain:
+Find closest request
+Move head
+Add seek time
+Print total seek time

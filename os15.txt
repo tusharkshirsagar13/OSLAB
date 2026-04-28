@@ -1,0 +1,124 @@
+os15
+🔹 1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <stdlib.h>
+→ Used for abs() (absolute value for seek calculation)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+n → number of disk requests
+req[50] → request sequence
+head → initial head position
+dir → direction (1 = right, 0 = left)
+total → total seek time
+🔹 3. Input: Number of Requests
+scanf("%d", &n);
+User enters total number of disk requests
+🔹 4. Input: Request Sequence
+scanf("%d", &req[i]);
+Stores all disk track numbers
+
+Example:
+
+98 183 37 122 14 124 65 67
+🔹 5. Input: Initial Head Position
+scanf("%d", &head);
+Starting position of disk head
+🔹 6. Input: Direction
+scanf("%d", &dir);
+1 → move right (towards higher tracks)
+0 → move left (towards lower tracks)
+🔹 7. Sorting the Request Array
+if(req[j] > req[j + 1])
+Uses Bubble Sort to arrange requests in ascending order
+
+👉 Important for SCAN logic
+
+🔹 8. Output Initial Head
+printf("%d", head);
+Prints starting position
+🔹 9. Store Initial Head
+int start = head;
+Keeps original head position for comparison
+🔹 10. SCAN Algorithm Logic
+
+👉 Disk head moves like an elevator:
+
+Goes in one direction
+Serves all requests
+Then reverses direction
+🔹 11. RIGHT Direction (dir == 1)
+➤ Step 1: Move Right
+if(req[i] >= start)
+Serve all requests greater than or equal to head
+total += abs(head - req[i]);
+Add movement distance
+head = req[i];
+Move head
+➤ Step 2: Move Left
+if(req[i] < start)
+After reaching end, reverse direction
+Serve remaining smaller requests
+🔹 12. LEFT Direction (dir == 0)
+➤ Step 1: Move Left
+if(req[i] <= start)
+Serve all smaller requests first
+➤ Step 2: Move Right
+if(req[i] > start)
+Then reverse direction
+Serve larger requests
+🔹 13. Output Movement Sequence
+
+Example:
+
+50 -> 65 -> 67 -> 98 -> ...
+Shows exact head movement path
+🔹 14. Total Seek Time
+printf("Total Seek Time = %d", total);
+Sum of all head movements
+🔹 15. Algorithm Used
+
+✅ SCAN (Elevator Algorithm)
+
+🔹 16. Key Concept of SCAN
+Head moves in one direction servicing requests
+Then reverses direction
+Like an elevator going up and down
+🔹 17. Important Observations
+Better than SSTF in avoiding starvation
+Provides more uniform wait time
+Head travels in a structured path
+🔹 18. Difference from SSTF
+SSTF → chooses nearest request
+SCAN → follows direction, not nearest
+🔹 19. Example Flow
+
+Requests:
+
+98 183 37 122 14 124 65 67
+Head = 53, Direction = Right
+
+Order:
+
+53 → 65 → 67 → 98 → 122 → 124 → 183 → 37 → 14
+🔹 20. Time Complexity
+Sorting: O(n²)
+Traversal: O(n)
+🔹 21. Key Concepts Demonstrated
+✅ Disk Scheduling
+✅ SCAN Algorithm
+✅ Head movement simulation
+✅ Seek time calculation
+🔹 22. Important Term
+
+👉 Seek Time
+
+Time required for disk head to move between tracks
+🔹 23. Simple Flow Summary
+Take input (requests, head, direction)
+Sort requests
+Move head in given direction
+Reverse direction
+Calculate total seek time
+Print movement

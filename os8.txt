@@ -1,0 +1,125 @@
+1. Header File
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+🔹 2. Structure Definition
+struct Process{
+    int id, at, bt, prio, st, et, tat, wt, completed;
+};
+➤ Fields Meaning:
+id → Process ID
+at → Arrival Time
+bt → Burst Time
+prio → Priority (smaller value = higher priority)
+st → Start Time
+et → End Time
+tat → Turnaround Time
+wt → Waiting Time
+completed → flag (0 = not done, 1 = done)
+🔹 3. Input: Number of Processes
+scanf("%d",&n);
+User enters total number of processes
+🔹 4. Input: AT, BT, Priority
+scanf("%d %d %d",&p[i].at, &p[i].bt, &p[i].prio);
+For each process:
+Arrival Time
+Burst Time
+Priority
+🔹 5. Initialization
+p[i].completed = 0;
+Marks all processes as not executed
+🔹 6. Main Scheduling Loop
+while(count < n)
+Runs until all processes are completed
+🔹 7. Find Highest Priority Process
+int idx = -1;
+int min_prio = 1e9;
+idx → index of selected process
+min_prio → smallest priority value
+➤ Selection Condition
+if(p[i].at <= current_time && !p[i].completed)
+Process must:
+Have arrived
+Not be completed
+if(p[i].prio < min_prio)
+Select process with highest priority
+👉 (lower number = higher priority)
+🔹 8. CPU Idle Case
+if(idx == -1){
+    current_time++;
+}
+If no process available → CPU waits
+🔹 9. Process Execution
+p[idx].st = current_time;
+Start Time
+p[idx].et = p[idx].st + p[idx].bt;
+End Time
+🔹 10. Time Calculations
+➤ Turnaround Time:
+
+TAT=ET−AT
+
+p[idx].tat = p[idx].et - p[idx].at;
+➤ Waiting Time:
+
+WT=TAT−BT
+
+p[idx].wt = p[idx].tat - p[idx].bt;
+🔹 11. Mark as Completed
+p[idx].completed = 1;
+count++;
+🔹 12. Update Time
+current_time = p[idx].et;
+Move CPU forward
+🔹 13. Output Table
+ID   AT   BT   Priority   ST   ET   TAT   WT
+Displays all process details
+🔹 14. Average Calculation
+total_tat += p[i].tat;
+total_wt += p[i].wt;
+Compute:
+Average TAT = total_tat / n  
+Average WT  = total_wt / n
+🔹 15. Algorithm Used
+
+✅ Non-Preemptive Priority Scheduling
+
+🔹 16. Key Concept
+CPU selects process with highest priority
+Once started → runs till completion
+🔹 17. Important Observations
+Lower priority number = higher priority
+No preemption → process cannot be interrupted
+Can cause starvation:
+→ Low priority processes may wait long
+🔹 18. Example Flow
+
+Processes:
+
+P1: AT=0, BT=5, Priority=2  
+P2: AT=1, BT=3, Priority=1  
+P3: AT=2, BT=4, Priority=3  
+
+Execution:
+👉 P1 → P2 → P3
+(based on arrival + priority)
+
+🔹 19. Time Complexity
+For each process → check all processes
+
+👉 O(n²)
+
+🔹 20. Key Concepts Demonstrated
+✅ Priority scheduling
+✅ CPU idle handling
+✅ Process selection logic
+✅ Time calculations
+🔹 21. Important Note ⚠️
+No return 0; at the end (good practice to add)
+1e9 used as large value → works fine but can use INT_MAX for clarity
+🔹 22. Simple Flow Summary
+Take process input
+While not all completed:
+Select highest priority process
+Execute fully
+Calculate ST, ET, TAT, WT
+Print results

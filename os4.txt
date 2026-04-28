@@ -1,0 +1,148 @@
+1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <limits.h>
+→ Used for INT_MAX (represents very large value)
+🔹 2. Structure Definition
+struct Process
+{
+    int id, at, bt, rt, priority, st, et, tat, wt;
+    int started;
+};
+➤ Fields Meaning:
+id → Process ID
+at → Arrival Time
+bt → Burst Time
+rt → Remaining Time
+priority → Priority (smaller value = higher priority)
+st → Start Time
+et → End Time
+tat → Turnaround Time
+wt → Waiting Time
+started → flag for first execution
+🔹 3. Main Variables
+int completed = 0, t = 0;
+int min_priority = INT_MAX;
+int shortest = 0, found = 0;
+t → current time
+completed → completed processes
+min_priority → smallest priority value
+shortest → selected process index
+found → flag to check if process is available
+🔹 4. Input Section
+scanf("%d", &n);
+User enters number of processes
+➤ Process Input
+scanf("%d %d %d", &p[i].at, &p[i].bt, &p[i].priority);
+
+Initialization:
+
+p[i].rt = p[i].bt;
+p[i].started = 0;
+🔹 5. Algorithm Used
+
+✅ Preemptive Priority Scheduling
+
+👉 CPU always selects process with highest priority (lowest value)
+👉 Can interrupt running process
+
+🔹 6. Main Loop
+while (completed != n)
+Runs until all processes finish
+🔹 7. Select Highest Priority Process
+if (p[j].at <= t && p[j].priority < min_priority && p[j].rt > 0)
+Process must:
+Have arrived
+Have highest priority
+Not completed
+🔹 8. CPU Idle Case
+if (found == 0)
+{
+    t++;
+    continue;
+}
+If no process available → CPU waits
+🔹 9. First Execution
+if (p[shortest].started == 0)
+Set start time:
+p[shortest].st = t;
+p[shortest].started = 1;
+🔹 10. Execute Process (1 Unit)
+p[shortest].rt--;
+Reduce remaining time by 1
+🔹 11. Update Priority Tracker
+min_priority = (p[shortest].rt == 0) ? INT_MAX : p[shortest].priority;
+Reset when process completes
+🔹 12. Process Completion
+if (p[shortest].rt == 0)
+When finished:
+completed++;
+p[shortest].et = t + 1;
+🔹 13. Time Calculations
+➤ Turnaround Time:
+
+TAT=ET−AT
+
+p[shortest].tat = p[shortest].et - p[shortest].at;
+➤ Waiting Time:
+
+WT=TAT−BT
+
+p[shortest].wt = p[shortest].tat - p[shortest].bt;
+🔹 14. Increment Time
+t++;
+Move to next time unit
+🔹 15. Output Table
+PID   AT   BT   RT   Priority   ST   ET   TAT   WT
+🔹 16. Average Calculation
+total_tat += p[i].tat;
+total_wt += p[i].wt;
+Compute:
+Average TAT = total_tat / n  
+Average WT  = total_wt / n
+🔹 17. Key Concept
+At every time unit:
+👉 Select process with highest priority
+Can preempt running process
+🔹 18. Important Observations
+Preemptive → dynamic switching
+Good for priority-based systems
+Can cause starvation:
+→ low-priority processes may never run
+🔹 19. Example Flow
+
+Processes:
+
+P1: AT=0, BT=5, Priority=2  
+P2: AT=1, BT=3, Priority=1  
+P3: AT=2, BT=4, Priority=3  
+
+Execution:
+👉 P1 → P2 (preempts P1) → P2 → P1 → P3
+
+🔹 20. Time Complexity
+For each time unit → scan all processes
+
+👉 O(n × total_time)
+
+🔹 21. Key Concepts Demonstrated
+✅ Preemptive scheduling
+✅ Priority-based selection
+✅ CPU idle handling
+✅ Dynamic execution
+🔹 22. Important Note ⚠️
+min_priority is NOT reset at start of each loop
+👉 Ideally should be reset inside while loop:
+min_priority = INT_MAX;
+
+Otherwise wrong process may be selected
+
+🔹 23. Simple Flow Summary
+Take process input
+Initialize remaining time
+At each time:
+Select highest priority process
+Execute 1 unit
+Repeat until complete
+Calculate CT, TAT, WT
+Print results

@@ -1,0 +1,127 @@
+1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <stdlib.h>
+→ Used for abs() (to calculate seek distance)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+n → number of requests
+req[50] → disk request sequence
+head → initial head position
+dir → direction (1 = right, 0 = left)
+total → total seek time
+🔹 3. Input: Number of Requests
+scanf("%d", &n);
+User enters total disk requests
+🔹 4. Input: Request Sequence
+scanf("%d", &req[i]);
+Stores all track numbers
+
+Example:
+
+98 183 37 122 14 124 65 67
+🔹 5. Input: Initial Head Position
+scanf("%d", &head);
+Starting position of disk head
+🔹 6. Input: Direction
+scanf("%d", &dir);
+1 → move right
+0 → move left
+🔹 7. Sorting the Requests
+if(req[j] > req[j + 1])
+Uses Bubble Sort
+Arranges requests in ascending order
+
+👉 Required for correct traversal
+
+🔹 8. Output Initial Head
+printf("%d", head);
+Prints starting head position
+🔹 9. Store Initial Position
+int start = head;
+Used to separate left and right side requests
+🔹 10. C-LOOK Algorithm Logic
+
+👉 C-LOOK works like a circular version of LOOK:
+
+Moves in one direction
+After reaching last request → jumps to first request
+Does NOT go to disk ends
+🔹 11. RIGHT Direction (dir == 1)
+➤ Step 1: Move Right
+if(req[i] >= start)
+Serve all requests greater than head
+total += abs(head - req[i]);
+head = req[i];
+Calculate movement and update head
+➤ Step 2: Circular Jump
+if(req[i] < start)
+After last request → jump to smallest request
+Continue servicing remaining
+
+👉 No movement to extreme disk end
+
+🔹 12. LEFT Direction (dir == 0)
+➤ Step 1: Move Left
+if(req[i] <= start)
+Serve smaller requests first
+➤ Step 2: Circular Jump
+if(req[i] > start)
+Jump to highest request
+Continue servicing
+🔹 13. Output Movement Sequence
+
+Example:
+
+50 -> 65 -> 67 -> 98 -> ... -> 14 -> 37
+Shows exact circular movement
+🔹 14. Total Seek Time
+printf("Total Seek Time = %d", total);
+Displays total head movement
+🔹 15. Algorithm Used
+
+✅ C-LOOK (Circular LOOK Disk Scheduling)
+
+🔹 16. Key Concept of C-LOOK
+Move in one direction
+After last request → jump to first request
+Avoid unnecessary movement to disk ends
+🔹 17. Important Observations
+More efficient than SCAN
+Reduces unnecessary travel
+Provides uniform waiting time
+🔹 18. Difference from SCAN / LOOK
+SCAN → goes till disk end
+LOOK → goes till last request
+C-LOOK → jumps circularly (no reverse traversal)
+🔹 19. Example Flow
+
+Requests:
+
+98 183 37 122 14 124 65 67
+Head = 53, Direction = Right
+
+Order:
+
+53 → 65 → 67 → 98 → 122 → 124 → 183 → 14 → 37
+🔹 20. Time Complexity
+Sorting: O(n²)
+Traversal: O(n)
+🔹 21. Key Concepts Demonstrated
+✅ Disk Scheduling
+✅ Circular traversal
+✅ Seek time optimization
+✅ Head movement tracking
+🔹 22. Important Term
+
+👉 Seek Time
+
+Time taken for disk head to move between tracks
+🔹 23. Simple Flow Summary
+Take input (requests, head, direction)
+Sort requests
+Move in one direction
+Jump to other end (circular)
+Continue servicing
+Calculate total seek time

@@ -1,0 +1,137 @@
+1. Header Files
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+#include <stdlib.h>
+→ Used for abs() (to calculate seek distance)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+n → number of requests
+req[50] → request sequence
+head → current head position
+size → disk size
+dir → direction (1 = right, 0 = left)
+total → total seek length
+🔹 3. Input: Number of Requests
+scanf("%d", &n);
+User enters total disk requests
+🔹 4. Input: Request Sequence
+scanf("%d", &req[i]);
+Stores track numbers
+
+Example:
+
+98 183 37 122 14 124 65 67
+🔹 5. Input: Head & Disk Size
+scanf("%d", &head);
+scanf("%d", &size);
+head → starting position
+size → total tracks (e.g., 200 → tracks 0 to 199)
+🔹 6. Input: Direction
+scanf("%d", &dir);
+1 → move right
+0 → move left
+🔹 7. Sorting Requests
+if(req[j] > req[j + 1])
+Uses Bubble Sort
+Arranges requests in ascending order
+🔹 8. Output Header
+Current    Move
+Shows:
+Current position
+Head movement distance
+🔹 9. Store Initial Head
+int start = head;
+Used to divide left & right side requests
+🔹 10. C-SCAN Algorithm Logic
+
+👉 C-SCAN = Circular SCAN
+
+Head moves in one direction only
+After reaching end → jumps to other end
+Then continues in same direction
+🔹 11. RIGHT Direction (dir == 1)
+➤ Step 1: Move Right
+if(req[i] >= start)
+Serve all requests to the right
+total += abs(head - req[i]);
+head = req[i];
+➤ Step 2: Go to Disk End
+size - 1
+Move head to last track
+head = size - 1;
+➤ Step 3: Jump to Start (0) implicitly
+(Jump not printed, but movement counted via logic)
+➤ Step 4: Continue from Left
+if(req[i] < start)
+Serve remaining requests
+🔹 12. LEFT Direction (dir == 0)
+➤ Step 1: Move Left
+if(req[i] <= start)
+Serve left-side requests
+➤ Step 2: Go to Start
+head = 0;
+Move to track 0
+➤ Step 3: Jump to End
+Circular jump to highest track
+➤ Step 4: Continue Right
+if(req[i] > start)
+🔹 13. Output Each Step
+
+Example:
+
+53    0
+65   12
+67    2
+...
+Shows movement step-by-step
+🔹 14. Total Seek Time
+printf("Total Seek Length = %d", total);
+Sum of all movements
+🔹 15. Algorithm Used
+
+✅ C-SCAN (Circular SCAN)
+
+🔹 16. Key Concept of C-SCAN
+Head moves in one direction only
+After reaching end → jumps to other end
+Provides uniform wait time
+🔹 17. Important Observations
+Better fairness than SCAN
+Avoids bias toward middle tracks
+More uniform service
+🔹 18. Difference from SCAN
+Algorithm	Movement
+SCAN	Goes back and forth
+C-SCAN	Always one direction (circular)
+🔹 19. Example Flow
+
+Requests:
+
+98 183 37 122 14 124 65 67
+Head = 53, Direction = Right
+
+Order:
+
+53 → 65 → 67 → 98 → 122 → 124 → 183 → 199 → 0 → 14 → 37
+🔹 20. Time Complexity
+Sorting: O(n²)
+Traversal: O(n)
+🔹 21. Key Concepts Demonstrated
+✅ Disk Scheduling
+✅ Circular traversal
+✅ Seek time optimization
+✅ Fair resource allocation
+🔹 22. Important Term
+
+👉 Seek Time
+
+Time required to move disk head between tracks
+🔹 23. Simple Flow Summary
+Take input (requests, head, size, direction)
+Sort requests
+Move in one direction
+Reach disk end
+Jump to other end
+Continue servicing
+Calculate total seek time

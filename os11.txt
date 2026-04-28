@@ -1,0 +1,130 @@
+🔹 1. Header File
+#include <stdio.h>
+→ Used for input/output operations (printf, scanf)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+f → number of frames
+n → size of reference string
+🔹 3. Input: Number of Frames
+scanf("%d", &f);
+User enters how many memory frames are available
+🔹 4. Frame Initialization
+frames[i] = -1;
+-1 means frame is empty initially
+🔹 5. Input: Reference String
+User enters:
+Length n
+Reference array ref[n]
+
+Example:
+
+7 0 1 2 0 3 0 4
+🔹 6. Page Fault Counter
+int faults = 0;
+Tracks total number of page faults
+🔹 7. Output Table Header
+
+Displays format:
+
+Ref   F[0]   F[1]   F[2]   STATUS
+--------------------------------
+🔹 8. Main Loop
+for(int i = 0; i < n; i++)
+Iterates through each page in reference string
+🔹 9. HIT Check
+if(frames[j] == ref[i])
+➤ If page found:
+hit = 1
+No replacement required
+🔹 10. MISS (Page Fault)
+
+If page is not present in frames
+
+🔹 11. Optimal Replacement Logic
+int replace_idx = -1, farthest = i;
+replace_idx → index of page to replace
+farthest → tracks the farthest future use
+🔹 12. Find Page to Replace
+
+Loop through all frames:
+
+➤ Case 1: Empty Frame
+if(frames[j] == -1)
+Use empty frame immediately
+➤ Case 2: Find Future Usage
+int next_use = n + 1;
+Assume page is never used again
+
+Then check future:
+
+for(int k = i + 1; k < n; k++)
+Find next occurrence of current frame page
+➤ Select Optimal Page
+if(next_use > farthest)
+Replace the page which is:
+Used farthest in future OR
+Not used again at all
+
+👉 This is the core idea of Optimal Algorithm
+
+🔹 13. Replace Page
+frames[replace_idx] = ref[i];
+faults++;
+Insert new page
+Increment fault count
+🔹 14. Output Each Step
+➤ If FAULT:
+Ref   Frames   FAULT
+➤ If HIT:
+Ref   Frames   HIT
+Displays memory state after each reference
+🔹 15. Final Output
+No. of faults : faults
+No. of hits   : n - faults
+🔹 16. Algorithm Used
+
+✅ Optimal Page Replacement Algorithm
+
+🔹 17. Key Concept of Optimal
+Replace the page:
+👉 Which will be used farthest in future
+👉 OR Never used again
+🔹 18. Important Observation
+Looks ahead in reference string (future knowledge)
+Gives minimum possible page faults
+Not practical in real OS (used for comparison)
+🔹 19. Example Flow
+
+Reference:
+
+1 2 3 1 4
+Frames = 3
+
+Steps:
+
+1 → FAULT
+2 → FAULT
+3 → FAULT
+1 → HIT
+4 → Replace page used farthest in future
+🔹 20. Time Complexity
+Nested loops:
+
+👉 O(n × f × n) ≈ O(n² × f)
+
+(Since future search is inside loop)
+
+🔹 21. Key Concepts Demonstrated
+✅ Optimal Page Replacement
+✅ Future prediction
+✅ Page Hit vs Fault
+✅ Memory simulation
+🔹 22. Simple Flow Summary
+Take frames input
+Take reference string
+For each page:
+Check HIT
+If MISS → find farthest future use
+Replace optimal page
+Print results

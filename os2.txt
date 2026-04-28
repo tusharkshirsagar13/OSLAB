@@ -1,0 +1,133 @@
+1. Header Files
+#include <sys/wait.h>
+→ Used for wait() (parent waits for child)
+#include <stdlib.h>
+→ Used for exit()
+
+👉 (Missing but required)
+
+#include <stdio.h> → for input/output
+#include <unistd.h> → for fork(), getpid(), sleep()
+🔹 2. Sorting Functions
+➤ bubbleSort()
+Compares adjacent elements
+Swaps if needed
+Repeats until sorted
+
+👉 Output: Ascending order
+
+➤ selectionSort()
+Finds smallest element
+Places it in correct position
+Repeats for entire array
+
+👉 Output: Ascending order
+
+🔹 3. Input Section
+scanf("%d", &n);
+scanf("%d", &arr[i]);
+User enters:
+Number of elements
+Array elements
+🔹 4. fork() System Call
+pid_t pid = fork();
+Creates child process
+Now two processes exist:
+Parent
+Child
+🔹 5. Fork Return Cases
+➤ Case 1: pid < 0
+Fork failed
+Program exits
+➤ Case 2: pid == 0 (Child Process)
+Prints:
+Child PID
+Parent PID
+getpid(), getppid()
+🔸 Child Work
+selectionSort(arr, n);
+Sorts array using Selection Sort
+sleep(10);
+Child waits → gives time for parent to exit
+🔸 Orphan Process Demo
+printf("New PPID: %d", getppid());
+If parent exits before child:
+→ child becomes orphan
+→ adopted by system (init process)
+➤ Case 3: pid > 0 (Parent Process)
+🔹 6. Parent Process Logic
+➤ With wait()
+wait(NULL);
+Parent waits for child to finish
+Avoids zombie
+➤ Without wait() (Zombie Demo)
+sleep(20);
+Parent sleeps
+Child finishes early
+
+👉 Child becomes ZOMBIE
+(because parent hasn’t collected exit status)
+
+🔹 7. Parent Sorting
+bubbleSort(arr, n);
+Parent sorts array (ascending)
+
+OR in your mixed code:
+
+if(arr[j] < arr[j+1])
+
+👉 This creates descending order
+
+🔹 8. Zombie Process Concept
+Child finishes
+Parent does NOT call wait()
+
+👉 Child stays in memory as:
+➡️ Zombie process
+
+🔹 9. Orphan Process Concept
+Parent exits early
+
+👉 Child becomes:
+➡️ Orphan process
+
+New parent = system process (PID changes)
+🔹 10. Important Observation
+
+👉 Parent & Child have separate memory
+
+Sorting in child ≠ affects parent
+Each process has its own copy of array
+🔹 11. Major Problems in Your Code ⚠️
+❌ Multiple main() functions
+❌ Nested fork() inside child incorrectly
+❌ Missing braces {}
+❌ Mixed two different implementations
+
+❌ Duplicate loops:
+
+for(i = 0; i < n; i++)
+for(i = 0; i < n; i++)
+❌ Broken structure (won’t compile)
+🔹 12. What You Actually Intended
+
+Your code is combining:
+
+✅ Sorting using:
+Bubble Sort
+Selection Sort
+✅ Process concepts:
+fork()
+wait()
+Zombie process
+Orphan process
+🔹 13. Simple Flow (Correct Idea)
+Take input array
+Create child process
+Child:
+Sort using Selection Sort
+Parent:
+Either wait OR not wait
+Demonstrate:
+Zombie (no wait)
+Orphan (parent exits early)

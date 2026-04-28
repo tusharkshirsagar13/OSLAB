@@ -1,0 +1,107 @@
+🔹 1. Header File
+#include <stdio.h>
+→ Used for input/output functions (printf, scanf)
+🔹 2. Main Function
+Execution starts from int main()
+Declares arrays:
+at[10] → Arrival Time
+bt[10] → Burst Time
+ct[10] → Completion Time
+tat[10] → Turnaround Time
+wt[10] → Waiting Time
+Also declares:
+awt → Average Waiting Time
+atat → Average Turnaround Time
+🔹 3. Input: Number of Processes
+scanf("%d", &n);
+User enters total number of processes
+🔹 4. Input: Arrival Time & Burst Time
+scanf("%d%d", &at[i], &bt[i]);
+For each process:
+AT → when process arrives
+BT → execution time required
+🔹 5. Sorting by Arrival Time (FCFS Rule)
+if (at[i] > at[j])
+Processes are sorted based on Arrival Time
+Also swaps corresponding Burst Times
+
+👉 Ensures First Come First Serve order
+
+🔹 6. Initialize Time
+int time = 0;
+Tracks current CPU time
+🔹 7. Main Scheduling Logic
+for (i = 0; i < n; i++)
+Processes executed one by one
+🔹 8. CPU Idle Condition
+if (time < at[i])
+    time = at[i];
+If no process has arrived:
+→ CPU waits (idle)
+🔹 9. Completion Time (CT)
+ct[i] = time + bt[i];
+When process finishes execution
+🔹 10. Turnaround Time (TAT)
+
+👉 Formula:
+
+TAT=CT−AT
+
+tat[i] = ct[i] - at[i];
+🔹 11. Waiting Time (WT)
+
+👉 Formula:
+
+WT=TAT−BT
+
+wt[i] = tat[i] - bt[i];
+🔹 12. Update Time
+time = ct[i];
+Moves CPU clock forward
+🔹 13. Calculate Averages
+awt += wt[i];
+atat += tat[i];
+Sum up all WT and TAT
+🔹 14. Output Table
+P   AT   BT   CT   TAT   WT
+Displays all process details
+🔹 15. Final Output
+Avg WT = awt / n
+Avg TAT = atat / n
+🔹 16. Algorithm Used
+
+✅ FCFS (First Come First Serve) Scheduling
+
+🔹 17. Key Concept of FCFS
+Process that arrives first → executed first
+Non-preemptive scheduling
+🔹 18. Important Observations
+Simple and easy to implement
+Can cause Convoy Effect:
+→ Small processes wait behind large ones
+🔹 19. Example Flow
+
+Processes:
+
+P1: AT=0, BT=5  
+P2: AT=1, BT=3  
+P3: AT=2, BT=2  
+
+Execution order:
+👉 P1 → P2 → P3
+
+🔹 20. Time Complexity
+Sorting: O(n²)
+Scheduling: O(n)
+🔹 21. Key Concepts Demonstrated
+✅ FCFS Scheduling
+✅ CPU idle handling
+✅ CT, TAT, WT calculation
+✅ Average time calculation
+🔹 22. Simple Flow Summary
+Take process input (AT, BT)
+Sort by arrival time
+Execute processes in order
+Calculate CT, TAT, WT
+Compute averages
+Display results

@@ -1,0 +1,155 @@
+1. Header Files
+#include <stdio.h>
+→ Input/output functions
+#include <stdlib.h>
+→ Used for rand()
+#include <pthread.h>
+→ For thread creation (pthread_create)
+#include <semaphore.h>
+→ For semaphores (sem_wait, sem_post)
+#include <unistd.h>
+→ For sleep()
+🔹 2. Buffer Definition
+#define BUFFER_SIZE 5
+int buffer[BUFFER_SIZE];
+Fixed-size buffer of 5 elements
+Shared between producer and consumer
+🔹 3. Global Variables
+int in = 0;
+int out = 0;
+in → index where producer inserts item
+out → index where consumer removes item
+
+👉 Implements circular queue
+
+🔹 4. Synchronization Tools
+sem_t empty;
+sem_t full;
+pthread_mutex_t mutex;
+➤ Purpose:
+empty → counts empty slots
+full → counts filled slots
+mutex → ensures mutual exclusion
+🔹 5. Producer Function
+void *producer(void *arg)
+➤ Step 1: Produce Item
+item = rand() % 100;
+Generates random number
+➤ Step 2: Wait if Buffer Full
+sem_wait(&empty);
+Decreases empty count
+Blocks if buffer is full
+➤ Step 3: Lock Critical Section
+pthread_mutex_lock(&mutex);
+Ensures only one thread accesses buffer
+➤ Step 4: Insert Item
+buffer[in] = item;
+in = (in + 1) % BUFFER_SIZE;
+Insert item
+Move index circularly
+➤ Step 5: Unlock
+pthread_mutex_unlock(&mutex);
+➤ Step 6: Signal Consumer
+sem_post(&full);
+Increases full count
+➤ Step 7: Delay
+sleep(1);
+🔹 6. Consumer Function
+void *consumer(void *arg)
+➤ Step 1: Wait if Buffer Empty
+sem_wait(&full);
+Blocks if no items available
+➤ Step 2: Lock
+pthread_mutex_lock(&mutex);
+➤ Step 3: Remove Item
+item = buffer[out];
+out = (out + 1) % BUFFER_SIZE;
+➤ Step 4: Unlock
+pthread_mutex_unlock(&mutex);
+➤ Step 5: Signal Producer
+sem_post(&empty);
+Increases empty slots
+➤ Step 6: Delay
+sleep(2);
+🔹 7. Main Function
+➤ Thread Creation
+pthread_t prod, cons;
+pthread_create(&prod, NULL, producer, NULL);
+pthread_create(&cons, NULL, consumer, NULL);
+Creates producer & consumer threads
+➤ Semaphore Initialization
+sem_init(&empty, 0, BUFFER_SIZE);
+sem_init(&full, 0, 0);
+Initially:
+Buffer is empty → all slots available
+No items produced
+➤ Mutex Initialization
+pthread_mutex_init(&mutex, NULL);
+➤ Join Threads
+pthread_join(prod, NULL);
+pthread_join(cons, NULL);
+Wait for threads (infinite loop → runs forever)
+➤ Cleanup
+sem_destroy(&empty);
+sem_destroy(&full);
+pthread_mutex_destroy(&mutex);
+🔹 8. Algorithm Used
+
+✅ Producer–Consumer Problem (Bounded Buffer)
+
+🔹 9. Key Concept
+Producer adds items
+Consumer removes items
+Synchronization prevents:
+Buffer overflow
+Buffer underflow
+🔹 10. Important Observations
+Uses semaphores + mutex
+Avoids:
+Race conditions
+Data inconsistency
+🔹 11. Circular Queue Logic
+(in + 1) % BUFFER_SIZE
+(out + 1) % BUFFER_SIZE
+
+👉 Ensures buffer wraps around
+
+🔹 12. Synchronization Flow
+Producer waits for empty slot
+Locks buffer
+Produces item
+Unlocks
+Signals consumer
+Consumer waits for item
+Locks buffer
+Consumes item
+Unlocks
+Signals producer
+🔹 13. Example Output
+Produced: 45 at index 0
+Produced: 22 at index 1
+Consumed: 45 from index 0
+Produced: 78 at index 2
+Consumed: 22 from index 1
+🔹 14. Time Behavior
+Producer faster (sleep(1))
+Consumer slower (sleep(2))
+
+👉 Buffer may fill up
+
+🔹 15. Key Concepts Demonstrated
+✅ Multithreading
+✅ Semaphores
+✅ Mutex locks
+✅ Synchronization
+✅ Circular buffer
+🔹 16. Common Problems Avoided
+❌ Race condition
+❌ Deadlock (handled carefully)
+❌ Data corruption
+🔹 17. Simple Flow Summary
+Initialize buffer & semaphores
+Start producer & consumer threads
+Producer adds items
+Consumer removes items
+Synchronization ensures safety

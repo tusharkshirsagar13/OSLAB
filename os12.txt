@@ -1,0 +1,115 @@
+🔹 1. Header File
+#include <stdio.h>
+→ Used for input/output operations (printf, scanf)
+🔹 2. Main Function
+Execution starts from int main()
+Declares:
+n → number of pages
+f → number of frames
+pages[50] → reference string
+frames[10] → memory frames
+🔹 3. Input: Pages & Frames
+scanf("%d", &n);
+scanf("%d", &f);
+User enters:
+Total pages
+Number of frames
+🔹 4. Input: Reference String
+for (i = 0; i < n; i++)
+    scanf("%d", &pages[i]);
+Stores page sequence
+
+Example:
+
+1 2 3 4 1 2 5
+🔹 5. Frame Initialization
+frames[i] = -1;
+-1 means frame is empty initially
+🔹 6. Variables Used
+faults → counts page faults
+hits → counts page hits
+front → pointer for FIFO replacement
+🔹 7. Output Header
+Page   F0   F1   F2   Status
+🔹 8. Main Loop
+for (i = 0; i < n; i++)
+Iterates through each page
+🔹 9. HIT Check
+if (frames[j] == pages[i])
+➤ If found:
+found = 1
+Page is already in memory → HIT
+🔹 10. MISS (Page Fault)
+
+If page is not found:
+
+🔹 11. FIFO Replacement Logic
+frames[front] = pages[i];
+front = (front + 1) % f;
+Replace page at front
+Move pointer circularly using modulo %
+
+👉 This ensures:
+
+Oldest page is replaced first
+Queue behavior (First In First Out)
+🔹 12. Update Counters
+faults++;
+On MISS → increment faults
+hits++;
+On HIT → increment hits
+🔹 13. Output Each Step
+➤ If FAULT:
+Page   Frames   Fault
+➤ If HIT:
+Page   Frames   Hit
+Displays current frame status
+🔹 14. Final Output
+Total Hits   = hits
+Total Faults = faults
+🔹 15. Algorithm Used
+
+✅ FIFO (First In First Out) Page Replacement
+
+🔹 16. Key Concept of FIFO
+Replace the page:
+👉 Which came first (oldest in memory)
+🔹 17. Important Observation
+Uses circular queue logic
+Does NOT consider:
+Frequency of use
+Recent usage
+
+👉 Can lead to Belady’s Anomaly (more frames → more faults)
+
+🔹 18. Example Flow
+
+Reference:
+
+1 2 3 4
+Frames = 3
+
+Steps:
+
+1 → FAULT
+2 → FAULT
+3 → FAULT
+4 → Replace 1 (oldest)
+🔹 19. Time Complexity
+For each page → check all frames
+
+👉 O(n × f)
+
+🔹 20. Key Concepts Demonstrated
+✅ FIFO Page Replacement
+✅ Circular Queue
+✅ Page Hit vs Fault
+✅ Memory simulation
+🔹 21. Simple Flow Summary
+Take input
+Initialize frames
+For each page:
+Check HIT
+If MISS → replace using FIFO
+Print result
+Show total hits & faults

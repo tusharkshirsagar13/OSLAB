@@ -1,0 +1,107 @@
+1. Header File
+#include <stdio.h>
+→ Used for input/output (printf, scanf)
+🔹 2. Structure Definition
+struct Process{
+    int id, at, bt, st, et, tat, wt;
+};
+➤ Fields Meaning:
+id → Process ID
+at → Arrival Time
+bt → Burst Time
+st → Start Time
+et → End Time (Completion Time)
+tat → Turnaround Time
+wt → Waiting Time
+🔹 3. Input: Number of Processes
+scanf("%d",&n);
+User enters total number of processes
+🔹 4. Input: AT & BT
+scanf("%d %d",&p[i].at, &p[i].bt);
+For each process:
+Arrival Time
+Burst Time
+🔹 5. Sorting by Arrival Time
+if(p[j].at > p[j+1].at)
+Uses Bubble Sort
+Ensures processes are executed in FCFS order
+
+👉 First arriving process executes first
+
+🔹 6. Initialize Current Time
+int current_time = 0;
+Tracks CPU time
+🔹 7. Scheduling Logic (FCFS)
+for(int i=0; i<n; i++)
+Execute processes one by one
+🔹 8. CPU Idle Condition
+if(current_time < p[i].at)
+    current_time = p[i].at;
+If process hasn’t arrived:
+→ CPU waits (idle)
+🔹 9. Start Time (ST)
+p[i].st = current_time;
+Time when process starts execution
+🔹 10. End Time (ET / CT)
+p[i].et = p[i].st + p[i].bt;
+Completion time of process
+🔹 11. Turnaround Time (TAT)
+
+TAT=ET−AT
+
+p[i].tat = p[i].et - p[i].at;
+🔹 12. Waiting Time (WT)
+
+WT=TAT−BT
+
+p[i].wt = p[i].tat - p[i].bt;
+🔹 13. Update Time
+current_time = p[i].et;
+Move CPU time forward
+🔹 14. Output Table
+ID   AT   BT   ST   ET   TAT   WT
+Displays all scheduling details
+🔹 15. Average Calculation
+total_tat += p[i].tat;
+total_wt += p[i].wt;
+Compute averages:
+Average TAT = total_tat / n  
+Average WT  = total_wt / n
+🔹 16. Algorithm Used
+
+✅ FCFS (First Come First Serve)
+
+🔹 17. Key Concept of FCFS
+Process that arrives first → executes first
+Non-preemptive scheduling
+🔹 18. Important Observations
+Simple and easy
+No starvation
+Can cause Convoy Effect:
+→ Small processes wait behind large ones
+🔹 19. Example Flow
+
+Processes:
+
+P1: AT=0, BT=5  
+P2: AT=2, BT=3  
+P3: AT=4, BT=1  
+
+Execution:
+👉 P1 → P2 → P3
+
+🔹 20. Time Complexity
+Sorting: O(n²)
+Scheduling: O(n)
+🔹 21. Key Concepts Demonstrated
+✅ FCFS scheduling
+✅ CPU idle handling
+✅ Time calculations (ST, ET, TAT, WT)
+✅ Average metrics
+🔹 22. Simple Flow Summary
+Take process input
+Sort by arrival time
+Execute in order
+Calculate ST, ET
+Compute TAT & WT
+Print results
