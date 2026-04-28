@@ -1,63 +1,63 @@
 #include <stdio.h>
 
-struct Process{
-    int id, at, bt, rt, st, et, tat, wt;
-    int started;
-};
+int main() {
+    int n, tq, time = 0, front = 0, rear = 0;
+    int at[10], bt[10], rt[10], ct[10], tat[10], wt[10];
+    int q[100], inq[10] = {0}, done = 0;
 
-int main(){
-    int n, t=0, quantam, completed = 0;
-    printf("Enter the no of process & Time Quantam: ");
-    scanf("%d %d",&n, &quantam);
-    struct Process p[n];
+    printf("Enter n: ");
+    scanf("%d", &n);
 
-    for(int i=0; i<n; i++){
-        p[i].id = i+1;
-        printf("P%d | Enter the AT & BT : ",p[i].id);
-        scanf("%d %d",&p[i].at,&p[i].bt);
-        p[i].rt = p[i].bt;
-        p[i].started = 0;
+    for(int i = 0; i < n; i++) {
+        printf("AT BT P%d: ", i+1);
+        scanf("%d%d", &at[i], &bt[i]);
+        rt[i] = bt[i];
     }
 
-    while(completed < n){
-        int done_something = 0;
-        for(int j = 0; j<n; j++){
-            if(p[j].at<=t && p[j].rt>0){
-                done_something = 1;
+    printf("Time Quantum: ");
+    scanf("%d", &tq);
 
-                if(p[j].started == 0){
-                    p[j].started = 1;
-                    p[j].st = t;
-                }
+    // push processes that arrive at time 0
+    for(int i = 0; i < n; i++)
+        if(at[i] == 0) q[rear++] = i, inq[i] = 1;
 
-                if(p[j].rt>quantam){
-                    t+=quantam;
-                    p[j].rt-=quantam;
-                }else{
-                    t += p[j].rt;
-                    p[j].rt = 0;
-                    completed++;
-                    p[j].et = t;
-                    p[j].tat = p[j].et - p[j].at;
-                    p[j].wt = p[j].tat - p[j].bt;
-                }
-            }
+    while(done < n) {
+        if(front == rear) { time++; continue; }
+
+        int i = q[front++];
+
+        if(rt[i] > tq) {
+            time += tq;
+            rt[i] -= tq;
+        } else {
+            time += rt[i];
+            rt[i] = 0;
+            ct[i] = time;
+            done++;
         }
-        if(!done_something) t++;
+
+        // add newly arrived processes
+        for(int j = 0; j < n; j++)
+            if(at[j] <= time && !inq[j] && rt[j] > 0)
+                q[rear++] = j, inq[j] = 1;
+
+        // if not finished, push back to queue
+        if(rt[i] > 0) q[rear++] = i;
     }
 
-    printf("\nID\tAT\tBT\tST\tET\tTAT\tWT\n");
-    printf("----------------------------------------------------------\n");
-    float total_tat = 0;
-    float total_wt = 0;
-    for(int i = 0; i<n; i++){
-        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\n",p[i].id,p[i].at,p[i].bt,p[i].st,p[i].et,p[i].tat,p[i].wt);
-        total_tat += p[i].tat;
-        total_wt += p[i].wt;
+    float awt = 0, atat = 0;
+    printf("\nP\tAT\tBT\tCT\tTAT\tWT\n");
+
+    for(int i = 0; i < n; i++) {
+        tat[i] = ct[i] - at[i];
+        wt[i] = tat[i] - bt[i];
+        awt += wt[i];
+        atat += tat[i];
+
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
+               i+1, at[i], bt[i], ct[i], tat[i], wt[i]);
     }
 
-    printf("Average TAT: %0.2f \n",total_tat/n);
-    printf("Average WT: %0.2f \n",total_wt/n);
-
+    printf("\nAvg WT=%.2f\nAvg TAT=%.2f\n", awt/n, atat/n);
     return 0;
 }
